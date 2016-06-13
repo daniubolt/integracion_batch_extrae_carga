@@ -1,0 +1,48 @@
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+	<!-- U: max size of forms, SEE: https://www.eclipse.org/jetty/documentation/9.2.7.v20150116/configuring-form-size.html -->
+	<Call name="setAttribute">
+    <Arg>org.eclipse.jetty.server.Request.maxFormContentSize</Arg>
+    <Arg>500000</Arg>
+   </Call>
+  <Call name="setAttribute">
+    <Arg>org.eclipse.jetty.server.Request.maxFormKeys</Arg>
+    <Arg>200</Arg>
+   </Call>
+  <!-- digicert -->
+  <New id="sslContextFactory" class="org.eclipse.jetty.http.ssl.SslContextFactory">
+    <Set name="KeyStore"><SystemProperty name="HttpsKeysDir" default="." />/keystore</Set>
+    <Set name="KeyStorePassword">OBF:1vny1yte1x8g1wml1yf21ym71sar1uuq1ym51t331ym91uvg1saj1ym71yf41wnl1x8e1yt81vn4</Set>
+    <Set name="KeyManagerPassword">OBF:1vny1yte1x8g1wml1yf21ym71sar1uuq1ym51t331ym91uvg1saj1ym71yf41wnl1x8e1yt81vn4</Set>
+    <Set name="TrustStorePassword">OBF:1vny1yte1x8g1wml1yf21ym71sar1uuq1ym51t331ym91uvg1saj1ym71yf41wnl1x8e1yt81vn4</Set>
+ 		 <Set name="KeyStorePassword">OBF:1vny1zlo1x8e1vnw1vn61x8g1zlu1vn4</Set>
+ 		 <Set name="KeyManagerPassword">OBF:1u2u1wml1z7s1z7a1wnl1u2g</Set>
+ 		 <Set name="TrustStore"><SystemProperty name="HttpsKeysDir" default="." />/<SystemProperty name="jetty.truststore" default="keystore"/></Set>
+ 		 <Set name="TrustStorePassword">OBF:1vny1zlo1x8e1vnw1vn61x8g1zlu1vn4</Set>
+  </New>
+
+  <Call name="addConnector">
+    <Arg>
+      <New class="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
+       <Arg><Ref id="sslContextFactory" /></Arg>
+        <Set name="Port"><SystemProperty name="HttpsPort" default="8443" /></Set>
+        <Set name="maxIdleTime">30000</Set>
+        <Set name="Acceptors">2</Set>
+        <Set name="AcceptQueueSize">100</Set>
+
+        <!--you can disable cipher suites in the following section. -->
+				<!--
+        <Set name="IncludeCipherSuites">
+          <Array>
+            <Item>TLS_DHE_RSA_WITH_AES_128_CBC_SHA</Item>
+            <Item>SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA</Item>
+            <Item>TLS_RSA_WITH_AES_128_CBC_SHA</Item>
+            <Item>SSL_RSA_WITH_3DES_EDE_CBC_SHA</Item>
+            <Item>TLS_DHE_DSS_WITH_AES_128_CBC_SHA</Item>
+            <Item>SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA</Item>
+          </Array>
+        </Set>
+				-->
+      </New>
+    </Arg>
+  </Call>
+</Configure>

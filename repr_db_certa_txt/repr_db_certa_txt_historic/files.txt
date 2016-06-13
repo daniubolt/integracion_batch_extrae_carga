@@ -1,0 +1,14 @@
+"amareatypes.new",
+
+"categories.new",
+
+"links.new",
+"model.blocks.links.new",
+"model.facades.links.new",
+"model.street-sections.links.new",
+"nettypes.new",
+"revisions.new",
+"smstreettypes.new",
+"sprentities.new",
+
+"users.new",

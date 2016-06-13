@@ -1,0 +1,1 @@
+#INFO: crea los triggers EN LA BASE CERTA para registrar los DELTAS en las tablas que originalmente no usaban logid PERO son demasiado grandes para sincronizarlas enteras cada vez, ej. Areas, Calles, etc. 

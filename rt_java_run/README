@@ -1,0 +1,3 @@
+#INFO: los .jar de terceros (no EM) que usamos en rt_java, separados en este repo porque cambian poquito PERO son bastante grandes Y SIEMPRE en nuestro repo versionados y tagueados cuando entregamos a un cliente AUNQUE esten el mvn y la web y lo que sea. DEBEMOS tener NUESTRA copia de lo que usamos.
+
+Los que dicen .NO_SE_USA.porque estan por la razon que se explica Y se filtran al armar rt_java_run (pero tienen que decir exactamente .NO_SE_USA. en el nombre)

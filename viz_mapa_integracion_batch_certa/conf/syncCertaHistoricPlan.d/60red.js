@@ -1,0 +1,12 @@
+syncPlanAgregarLista([
+//"categoria_h.new",
+//"users_h.new",
+//"red_h.new",
+//"clase_h.new",
+"elemento_h.new",
+//"atr_def_h.new",
+"topologia_h.new",
+"elem_atr_h.new"
+//"GeoHub.new",
+//"GeoSitios.new"
+]);

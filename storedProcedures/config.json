@@ -1,0 +1,18 @@
+{
+  "driver": "oracle.jdbc.driver.OracleDriver",
+  "motor": "oracle",
+  "host": "10.70.254.197",
+  "port": "1521",
+  "service": "dbnav11g",
+  "user": "NAVCABLE_DESA",
+  "password": "NAVCABLE_DESA",
+  "packageName": "MODEL_API_2",
+  "customPackageName":"custom_cv",
+  "customProcedureName":["GeoSitios","GeoHub"],
+  "gzPath": "..//var//data//certa_deltas_historic",
+  "tmpPath": "tmp",
+  "cntPath": "..//var//run",
+  "groupFilePath":"..//viz_mapa_integracion_batch_certa//conf//syncGroupBy.js",
+  "syncDeltaMax": 1,
+  "maxLines": 100
+}

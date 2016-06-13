@@ -1,0 +1,4 @@
+#!/bin/sh
+#INFO: ejecutar un script con rt
+EMRT_BIN=$( cd "$( dirname "$0" )" && pwd )
+~/opt/jdk17/bin/java -DLogLvlMax=${LogLvlMax:-1} -jar $EMRT_BIN/emrt.jar $*

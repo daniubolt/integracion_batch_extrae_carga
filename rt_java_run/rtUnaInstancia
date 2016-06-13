@@ -1,0 +1,22 @@
+#!/bin/sh
+
+#INFO: ejecutar una sola instancia de un script, ej. desde cron
+EMRT_DIR=$( cd "$( dirname "$0" )" && pwd )
+VERSION_DIR=$( cd "$EMRT_DIR/.." && pwd )
+LOG_DIR=$VERSION_DIR/var/log
+CTL_DIR=$VERSION_DIR/var/run
+
+KEY=$1; shift
+DIR=$1; shift
+cd $DIR
+pidfile=$CTL_DIR/$KEY.pid
+if [ -f "$pidfile" ] ; then
+	PID=`cat $pidfile`
+	if kill -0 "$PID" 2>/dev/null; then
+    echo "$KEY sigue ejecutandose PID=$PID"
+    exit 1
+	fi
+fi  
+echo $$ > $pidfile
+$EMRT_DIR/rt $* > $LOG_DIR/$KEY.log 2>&1
+
