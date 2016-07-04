@@ -14,5 +14,5 @@
   "cntPath": "..//var//run",
   "groupFilePath":"..//viz_mapa_integracion_batch_certa//conf//syncGroupBy.js",
   "syncDeltaMax": 1,
-  "maxLines": 100
+  "maxLines": 900
 }

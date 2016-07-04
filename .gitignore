@@ -1,0 +1,6 @@
+var/run/SyncExtraeCerta.pid
+var/run/SyncProc.cnt
+var/run/extraeCertaHistoric_logid.cnt
+var/
+storedProcedures/logs/
+storedProcedures/logs/application.log.2016-06-14

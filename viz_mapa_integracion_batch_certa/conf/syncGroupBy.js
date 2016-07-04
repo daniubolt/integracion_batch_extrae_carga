@@ -1,3 +1,3 @@
 cfgGroupBy={
-	'elemento_h' : { 'campoPor' : 'id' , 'camposAgrupar':['x','y'] , 'campoResultado':'geo'}
+	'elemento_h' : { 'campoPor' : 'id' , 'camposAgrupar':['x','y'] , 'campoResultado':'geo' , 'campoResultadoTipo':'floatArray'}
 }
