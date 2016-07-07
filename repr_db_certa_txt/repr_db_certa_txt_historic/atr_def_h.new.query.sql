@@ -2,5 +2,5 @@ select linkid id_atr, linkcaption nombre, linktype id_tipo, linkvalidation id_ti
 logIdFrom id_inc_desde, logIdTo id_inc_hasta,
 to_char(dateFrom,'YYYY-MM-DD HH24:MI:SS')fec_inc_desde, to_char(dateTo,'YYYY-MM-DD HH24:MI:SS' )fec_inc_hasta
 from links_h
-where logIdFrom > $logIdSyncMin and logIdFrom <= $logIdSyncMax 
+where (logIdFrom > $logIdSyncMin and logIdFrom <= $logIdSyncMax) or (logIdTo > $logIdSyncMin AND logIdTo <= $logIdSyncMax)
 order by logIdFrom, id_atr

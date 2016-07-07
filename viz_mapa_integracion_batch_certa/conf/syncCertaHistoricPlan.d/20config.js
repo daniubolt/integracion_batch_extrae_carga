@@ -1,8 +1,8 @@
 syncPlanAgregarLista([
-"categoria_h.new",
-"revisions.new",
-"users_h.new",
-"amareatypes.new",
-"red_h.new",
-"smstreettypes.new"
+//"revisions.new",
+//"red_h.new",
+//"categoria_h.new"
+//"users_h.new",
+//"amareatypes.new",
+//"smstreettypes.new"
 ]);

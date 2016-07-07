@@ -1,2 +1,2 @@
-CfgCx= {url: "jdbc:oracle:thin:@(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP) (Host = gdesdb.multicanal.net.ar) (Port = 1525)) (CONNECT_DATA = (SID = GDES)))", user: "SIPREGIS", pass: "sipregis"};
-cxcfg=CfgCx
+CfgCx= {url: "jdbc:oracle:thin:@(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP) (Host = 10.70.254.197) (Port = 1521)) (CONNECT_DATA = (SERVICE_NAME=dbnav11g)))", user: "CERTACV", pass: "CERTACV"};
+//cxcfg=CfgCx

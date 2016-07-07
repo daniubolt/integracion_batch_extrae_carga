@@ -1,1 +1,2 @@
-CfgCx= {url: 'jdbc:sqlite:'+get_dir_home()+'/devel/consultoria/EM/devel/xrun/xPmMapaTest.db',user:"sa",pass:""}
+CfgCx= {url: "jdbc:oracle:thin:@(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP) (Host = srv-ora3.corp.cablevision.com.ar) (Port = 1521)) (CONNECT_DATA = (SERVER=dedicated)(SID = GISPROMD)))", user: "GISTMP2", pass: "gistmp2"};
+//cxcfg=CfgCx
