@@ -105,9 +105,13 @@ function cargarParaManifest(plan,manifestFile,logId) {
 			var path= nfo ? CfgDeltaDir+"/"+nfo.fname : "ERROR:MISSING";
 			logm("NFO",1,"SYNC PASO START", {pasoNombre: pasoNombre, index: i, path: path, manifest_info: nfo});
 			try {
+				var pasoNombreAnt =pasoNombre;
+				/**OJO CON ESTA NEGRADA!!**///
 				var pasoNombreOk= pasoNombre.replace(/GeoStreetPartVtx/,"GeoStreetVtx").replace(/CfgEntities/,"CfgEntityType").replace(/CfgAttrTypes/,"CfgAttrType").replace(/CfgAreaTypes/,"CfgAreaType"); //XXX:solucionarlo en Extrae
 				var sqlNombre= pasoNombreOk.replace(/\.deleted/,".delete").replace(/\.created/,".insert");
 				if (sqlNombre == pasoNombreOk) { sqlNombre= sqlNombre+".insert"; } //A: si la tabla se sincroniza entera y no por deltas, el sql para cargar filas se llama xyz.insert
+				////**///
+				
 				if (CfgIsFirstImport && sqlNombre.indexOf(".delete") != -1 ) { continue; } //A: si es la primera vez que cargamos, no necesitamos ejecutar los comandos que borran, porque no hay nada para borrar
 
 				if (cfgCallExtFile) { //A: LLAMA A UN JAR EXTERNO con los datos
@@ -117,6 +121,7 @@ function cargarParaManifest(plan,manifestFile,logId) {
 							cfgExternalJarClass, cfgExternalJarMethod, 
 							gzFilePath, logIdSyncMin, logIdSyncMax);
 				} else { //A: cargar via sql
+					
 					var sql= reprDbSqlFor(sqlNombre, CfgReprDbPfx);
 					logm("DBG",1,"DB REPDB SQL",{sql: sql, pasoNombre: pasoNombre});
 					//A: tengo el sql que inserta los datos nuevos o borra los que ya no van

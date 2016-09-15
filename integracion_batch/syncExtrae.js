@@ -5,16 +5,8 @@ load("libsync.js");
 //S: CFG defaults
 CfgFile= ARGV[1] || "../conf/extrae.certa.js" //U: path al archivo de configuracion, puede redefinir TODO!
 CfgCx= { url: "CONFIGURAR DB URL", user: "CONFIGURAR DB USER", pass: "CONFIGURAR DB PASS" };
-//CfgDeltaDir= "../var/data/certa_deltas"; //U: carpeta donde se guardan los archivos con datos extraidos
 //CfgDeltaPfx= new Date().getTime(); //U: se pega ANTES del nombre de cada archivo de datos extraidos
 CfgDeltaPfx= "x_";
-CfgLogIdPath= "../var/run/extraeCerta_logid.cnt"; //U: archivo donde guardamos el ultimo logid extraido
-CfgCentinelPath= "../var/run/extraeCerta_finalizado"; //U: archivo que indica que ya no hay novedades
-
-CfgLogSyncMin= 0; //U: minima revision que sincronizamos, si no queremos empezar de la primera
-
-//CfgLogSyncDeltaMax= 0; //U: maxima cantidad de versiones a extraer por ejecucion, XXX, OJO! a) no garantiza que no nos toque MUCHISIMA info en UNA sola revision, b) los queries se vuelven bastante mas costosos y lentos si tambien filtramos que la version no se pase de un maximo 
-
 CfgOnlyVersioned= false; //U: si es true solo se extraeran las tablas que tienen filtro por logid, pero OJO que eso no incluiria cambios en las de iconos, entidades, etc.
 CfgOnlyLastVersion= false; //Solo tomar la ultima revision, sin bajas. NFO: El filtro de vigentes esta actualmente en los queries
 
@@ -24,9 +16,8 @@ CfgAppendSql= ""; //U: Para PRUEBAS, agregar al WHERE ej "ROWNUM<10"
 CfgPlanStepFrom= 0; //U: Para PRUEBAS, saltear los primeros pasos del plan
 CfgPlanStepTo= -1; //U: Para PRUEBAS, parar antes del final del plan
 
-//CfgReprDbPfx= "../repr_db_certa_txt/repr_db_certa_txt_historic/"; //U: pegar ANTES del nombre de archivo con el query
 CfgQueryForLogIds= "logIdMinMax.query"; //Query que se utilizará para obtener el maximo y el minimo logid de la base de datos
-
+cfgLastFile = '../../CARTO/origen/LAST.info';
 //A: defaults de configuracion definidos
 //=============================================================================
 syncExtraerCfgLoad= function () {
@@ -36,34 +27,46 @@ syncExtraerCfgLoad= function () {
 		load(CxCfgFile);
 	}
 
-	logm("NFO", 1, "SYNC EXTRAE CONFIG LOAD", CfgFile);
 	load(CfgFile);
 }
 
 //A: configuracion actualizada desde archivo
 //=============================================================================
 syncExtraer= function (plan) {
-	var hasGroupBy = true;
+ 
+	logm("NFO", 1, "SYNC EXTRAE CONFIG LOAD", CfgFile);
+
 	var groupByObj ;
-	
-	if (typeof cfgGroupBy === 'undefined') {
-		hasGroupBy = false;
-	}
-	
-	logm("NFO",1,"CFG GROUP BY",cfgGroupBy);
 	
 	logm("NFO", 1, "SYNC EXTRAE CONFIG READY", { plan: plan });
 	ensure_dir(CfgDeltaDir); //A: el dir para escribir los deltas existe
-    logm("NFO", 1, "ANTES DE TOMAR LOGID", { CfgLogIdPath : CfgLogIdPath });
-	var logId_sync_anterior= Math.max(contador_file(CfgLogIdPath, 0), CfgLogSyncMin);
+/////////////
+	var lastFile ;
+	var hayParaExtraer
+	var logId_sync_anterior;
+	var logId_sync_actual;
+	
+	if(exists_file(cfgLastFile)){
+
+		var lines = get_file(cfgLastFile).split('\n');
+		var lastLogId = lines[0].split(':');
+		//ya corrio el gestor 
+	    lastFile=JSON.parse(a);
+		logId_sync_actual=lastLogId[1];
+		logId_sync_anterior = contador_file(CfgLogIdPath, 0);
+		
+		if(logId_sync_anterior!=logId_sync_actual){
+			hayParaExtraer=true;
+		}
+	}
+
+
+///////////	
+	/*var logId_sync_anterior= Math.max(contador_file(CfgLogIdPath, 0), CfgLogSyncMin);
 	//A: logId_sync_anterior tiene el ultimo que extrajimos o el configurado como minimo
 	
 	var logIdSts= dbQueryFirstKv(cx(), reprDbSqlFor(CfgQueryForLogIds, CfgReprDbPfx));
-	//A: logIdSts tiene los ultimos de la base, que actualizo el otro sistema
-	//XXX: Con los logids de ejecucion previa o 1 en su defecto alcanza.
-	//El maximo esta en la sprtables y ahorra tener que recorrer una tabla inmensa en cada ejecucion batch
-	//|->Obtener con el query revisions.last de repr_db_certa
-	//|->OJO: Sprtables tiene el siguiente, todos los queries estan comparando por <. HF (+1)--v
+	//A: logIdSts tiene los ultimos de la base
 
 	var logId_sync_actual;
 	if (logId_sync_anterior == 0) {
@@ -72,7 +75,7 @@ syncExtraer= function (plan) {
 		logId_sync_actual= Math.min(logId_sync_anterior + CfgLogSyncDeltaMax, parseInt(logIdSts.maximo)); 
 	} else {
 		logId_sync_actual= logIdSts.maximo;
-	}
+	}*/
 	//A: logId_sync_actual tiene el nro hasta el que tenemos que sincronizar
 
 	var manifest= {
@@ -93,14 +96,14 @@ syncExtraer= function (plan) {
 	}
 	//A: si ya estaba en el medio de una extraccion que se interrumpio, cargue el manifest para seguir desde donde habia dejado
 
-	var hayParaExtraer= logId_sync_anterior < logId_sync_actual;
+	//var hayParaExtraer= logId_sync_anterior < logId_sync_actual;
 
 	cfgParams= {
 		hayParaExtraer: hayParaExtraer,
 		logId_sync_anterior: logId_sync_anterior,
 		logId_sync_actual: logId_sync_actual,
-		logIdDbMin: logIdSts.minimo + "",
-		logIdDbMax: logIdSts.maximo + "",
+		logIdDbMin: logId_sync_anterior + "",
+		logIdDbMax: logId_sync_actual + "",
 		CfgLogSyncDeltaMax: CfgLogSyncDeltaMax,
 		CfgSyncPlan: CfgSyncPlan
 	};
@@ -123,9 +126,10 @@ syncExtraer= function (plan) {
 			var noManifest= true;
 			for (var i= CfgPlanStepFrom; i < planStepTo; i++) {
 				var stepFile= plan[i];
-				var groupByForStep={};
+				var groupByForStep=null;
 
-				if(hasGroupBy){					
+				if(hasGroupBy){	
+					groupByForStep={}				
 					var stepArr = stepFile.split('.');					
 					var key = stepArr[0];
 
@@ -187,7 +191,7 @@ syncExtraer= function (plan) {
 				}
 			}
 	} else {
-		logm("NFO", 1, "SYNC EXTRAE END, OK NADA PARA EXTRAER", cfgParams);
+		logm("NFO", 1, "SYNC EXTRAE END, OK NADA PARA EXTRAER 1", cfgParams);
 		contador_file(CfgCentinelPath, 1, true);
 	}
 }

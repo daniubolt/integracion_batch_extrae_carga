@@ -1,12 +1,3 @@
 syncPlanAgregarLista([
-//"areas.new",
-//"areas_vtc.new",
-//"blocks.new",
-//"blocks.vertix",
-//"facades.new",
-//"facades.vertix1.new",
-//"facades.vertix2.new",
-//"street-sections.new",
-//"street-sections.vertix",
-//"streets.new"
+
 ]);
