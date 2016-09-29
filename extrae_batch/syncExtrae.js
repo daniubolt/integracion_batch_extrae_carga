@@ -17,7 +17,7 @@ CfgPlanStepFrom= 0; //U: Para PRUEBAS, saltear los primeros pasos del plan
 CfgPlanStepTo= -1; //U: Para PRUEBAS, parar antes del final del plan
 
 CfgQueryForLogIds= "logIdMinMax.query"; //Query que se utilizará para obtener el maximo y el minimo logid de la base de datos
-cfgLastFile = '../../CARTO/origen/LAST.info';
+
 //A: defaults de configuracion definidos
 //=============================================================================
 syncExtraerCfgLoad= function () {
@@ -41,7 +41,8 @@ syncExtraer= function (plan) {
 	logm("NFO", 1, "SYNC EXTRAE CONFIG READY", { plan: plan });
 	ensure_dir(CfgDeltaDir); //A: el dir para escribir los deltas existe
 /////////////
-	var lastFile ;
+	var lastFile ={
+	}
 	var hayParaExtraer
 	var logId_sync_anterior;
 	var logId_sync_actual;
@@ -51,8 +52,8 @@ syncExtraer= function (plan) {
 		var lines = get_file(cfgLastFile).split('\n');
 		var lastLogId = lines[0].split(':');
 		//ya corrio el gestor 
-	    lastFile=JSON.parse(a);
-		logId_sync_actual=lastLogId[1];
+
+		logId_sync_actual=lastLogId[1].trim();
 		logId_sync_anterior = contador_file(CfgLogIdPath, 0);
 		
 		if(logId_sync_anterior!=logId_sync_actual){
@@ -60,6 +61,7 @@ syncExtraer= function (plan) {
 		}
 	}
 
+	logm("NFO", 1, "SYNC EXTRAE LAST LOG ID", { last: logId_sync_actual });
 
 ///////////	
 	/*var logId_sync_anterior= Math.max(contador_file(CfgLogIdPath, 0), CfgLogSyncMin);
@@ -104,7 +106,6 @@ syncExtraer= function (plan) {
 		logId_sync_actual: logId_sync_actual,
 		logIdDbMin: logId_sync_anterior + "",
 		logIdDbMax: logId_sync_actual + "",
-		CfgLogSyncDeltaMax: CfgLogSyncDeltaMax,
 		CfgSyncPlan: CfgSyncPlan
 	};
 	logm("NFO", 1, "SYNC EXTRAE PARAMS READY", cfgParams);
@@ -171,6 +172,7 @@ syncExtraer= function (plan) {
 							logmex("ERR", 1, "SYNC EXTRAE PASO", { step: i, query: stepFile, plan: plan }, ex);
 						}
 					}
+					hasGroupBy=false;
 				} 
 				else { logm("NFO", 3, "SYNC EXTRAE PASO OMITIDO", plan[i]); }
 				//A: termine de procesar UN paso
