@@ -47,6 +47,9 @@ syncExtraer= function (plan) {
 	var logId_sync_anterior;
 	var logId_sync_actual;
 	
+	
+	logm("NFO",1,"CFG GROUP BY",cfgGroupBy);
+	
 	if(exists_file(cfgLastFile)){
 
 		var lines = get_file(cfgLastFile).split('\n');
@@ -149,7 +152,7 @@ syncExtraer= function (plan) {
 					} else { //A: no esta el archivo correspondiente a este paso
 						logm("DBG", 3, "SYNC EXTRAE PASO COMIENZA", { idx: i, paso: stepFile, path: CfgReprDbPfx + plan[i], });
 						try {
-							var r= syncStd(
+							var r= syncStdGroupBy(
 									logId_sync_actual, //U: logId MAXIMO se pondra en el nombre de archivo
 									CfgReprDbPfx + plan[i],//U: path
 									CfgDeltaDir,
